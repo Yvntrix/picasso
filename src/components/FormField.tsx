@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from "react";
+import { ChangeEvent } from "react";
 
 interface FormFieldProps {
   labelName: string;
@@ -11,7 +11,7 @@ interface FormFieldProps {
   handleSurpriseMe?: () => void;
 }
 
-const FormField: FC<FormFieldProps> = ({
+const FormField = ({
   labelName,
   type,
   name,
@@ -20,7 +20,7 @@ const FormField: FC<FormFieldProps> = ({
   handleChange,
   isSurpriseMe,
   handleSurpriseMe,
-}) => {
+}: FormFieldProps) => {
   return (
     <div>
       <div className="flex items-center gap-2 mb-2">

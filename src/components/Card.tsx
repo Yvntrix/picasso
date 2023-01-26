@@ -1,9 +1,44 @@
-const Card = () => {
+import { downloadImage } from "../utils";
+
+interface Props {
+  _id: string;
+  name: string;
+  prompt: string;
+  photo: string;
+}
+const Card = ({ _id, name, prompt, photo }: Props) => {
   return (
-    <div>
-      Enter
+    <div className="rounded-xl group relative shadow-card hover:shadow-cardhover card">
+      <img
+        className="w-full h-auto object-cover rounded-xl"
+        src={photo}
+        alt={prompt}
+      />
+      <div className="group-hover:flex flex-col justify-end h-full hidden absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-gray-900/5 p-4 rounded-xl">
+        <p className="text-white text-sm overflow-y-auto prompt">{prompt}</p>
+
+        <div className="mt-5 flex justify-between items-center gap-2">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-full object-cover bg-green-700 flex justify-center items-center text-white text-xs font-bold">
+              {name[0]}
+            </div>
+            <p className="text-white text-sm">{name}</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => downloadImage(_id, photo)}
+            className="outline-none bg-transparent border-none"
+          >
+            <img
+              src="./download.png"
+              alt="download"
+              className="w-6 h-6 object-contain invert"
+            />
+          </button>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default Card;

@@ -1,12 +1,54 @@
-import { useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Cards, FormField } from "../components";
-import Loader from "../components/Loader";
 
 const Home = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [allPosts, setAllPosts] = useState<any>([]);
 
-  const [searchText, setSearchText] = useState<string>("s");
+  const [searchText, setSearchText] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<any>([]);
+  const [searchTimeout, setSearchTimeout] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true);
+
+      try {
+        const response = await fetch("https://picassoai-server.onrender.com/api/v1/posts", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          setAllPosts(result.data.reverse());
+        }
+      } catch (error) {
+        alert(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPosts();
+  }, []);
+
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    clearTimeout(searchTimeout);
+    setSearchText(e.target.value);
+
+    setSearchTimeout(
+      setTimeout(() => {
+        const searchResults = allPosts.filter(
+          (post: any) =>
+            post.name.toLowerCase().includes(searchText.toLowerCase()) ||
+            post.prompt.toLowerCase().includes(searchText.toLowerCase())
+        );
+        setSearchResults(searchResults);
+      }, 500)
+    );
+  };
 
   return (
     <section className="max-w-7xl mx-auto">
@@ -20,21 +62,33 @@ const Home = () => {
         </p>
       </div>
       <div className="mt-16">
-        {/* <FormField /> */}
+        <FormField
+          labelName="Search posts"
+          type="text"
+          name="text"
+          placeholder="Search something..."
+          value={searchText}
+          handleChange={handleSearchChange}
+        />
       </div>
       <div className="mt-10">
         {loading ? (
           <div className="flex justify-center items-center">
-            <Loader />
+            <img src="./rings.svg" className="h-24" />
           </div>
         ) : (
           <>
-            {searchText && <p>Search results for {searchText}</p>}
+            {searchText && (
+              <h2 className="font-medium text-gray-500 text-xl mb-3">
+                Showing Results for &nbsp;
+                <span className="text-gray-800">{searchText}</span>:
+              </h2>
+            )}
             <div className="grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3">
               {searchText ? (
-                <Cards data={[]} title="No results" />
+                <Cards data={searchResults} title="No results" />
               ) : (
-                <Cards data={[]} title="no post" />
+                <Cards data={allPosts} title="No post" />
               )}
             </div>
           </>

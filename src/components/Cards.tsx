@@ -1,11 +1,10 @@
-import { FC } from "react";
 import Card from "./Card";
 
 interface Props {
   data: any;
   title: string;
 }
-const Cards: FC<Props> = ({ data, title }) => {
+const Cards = ({ data, title }: Props) => {
   if (data?.length > 0) {
     return data.map((post: any) => <Card key={post._id} {...post} />);
   }
