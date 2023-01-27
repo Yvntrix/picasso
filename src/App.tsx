@@ -8,7 +8,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Toaster />
-      <header className="w-full flex justify-between items-center bg-white sm:px-8 px-4 py-4 border-b border-b-slate-200 fixed top-0 z-10">
+      <header className="w-full flex justify-between items-center bg-white sm:px-8 px-4 py-4 border-b border-b-slate-200 fixed top-0 left-0 z-10">
         <Link to="/">
           <Logo />
         </Link>
