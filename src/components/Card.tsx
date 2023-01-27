@@ -10,9 +10,11 @@ const Card = ({ _id, name, prompt, photo }: Props) => {
   return (
     <div className="rounded-xl group relative shadow-card hover:shadow-cardhover card">
       <img
-        loading="lazy"
         className="w-full h-auto object-cover rounded-xl"
-        src={"https:" + photo.split(":")[1]}
+        src={
+          "https:" +
+          photo.split(":")[1].replace("upload/", "upload/q_auto:low/")
+        }
         alt={prompt}
       />
       <div className="group-hover:flex flex-col justify-end h-full hidden absolute bottom-0 left-0 right-0 bg-gradient-to-t from-emerald-900 p-4 rounded-xl">
