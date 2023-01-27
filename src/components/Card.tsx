@@ -10,11 +10,12 @@ const Card = ({ _id, name, prompt, photo }: Props) => {
   return (
     <div className="rounded-xl group relative shadow-card hover:shadow-cardhover card">
       <img
+        loading="lazy"
         className="w-full h-auto object-cover rounded-xl"
         src={photo}
         alt={prompt}
       />
-      <div className="group-hover:flex flex-col justify-end h-full hidden absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-gray-900/5 p-4 rounded-xl">
+      <div className="group-hover:flex flex-col justify-end h-full hidden absolute bottom-0 left-0 right-0 bg-gradient-to-t from-emerald-900 p-4 rounded-xl">
         <p className="text-white text-sm overflow-y-auto prompt">{prompt}</p>
 
         <div className="mt-5 flex justify-between items-center gap-2">

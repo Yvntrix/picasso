@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormField } from "../components";
 import { getRandomPrompt } from "../utils";
+import toast from "react-hot-toast";
 
 interface Form {
   name: string;
@@ -27,7 +28,7 @@ const CreatePost = () => {
 
       try {
         const response = await fetch(
-          "https://picassoai-server.onrender.com/api/v1/posts",
+          import.meta.env.VITE_API_URL+"/api/v1/posts",
           {
             method: "POST",
             headers: {
@@ -40,12 +41,12 @@ const CreatePost = () => {
         await response.json();
         navigate("/");
       } catch (error) {
-        alert(error);
+        toast.error("Something went wrong");
       } finally {
         setLoading(false);
       }
     } else {
-      alert("Please enter a prompt and generate an image");
+      toast.error("Please enter a prompt and generate an image");
     }
   };
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +61,7 @@ const CreatePost = () => {
       try {
         setGeneratingImg(true);
         const response = await fetch(
-          "https://picassoai-server.onrender.com/api/v1/openai",
+          import.meta.env.VITE_API_URL+"/api/v1/openai",
           {
             method: "POST",
             headers: {
@@ -70,18 +71,26 @@ const CreatePost = () => {
           }
         );
 
-        const data = await response.json();
+        if (response.status === 500) {
+          toast.error(
+            "Your prompt contain inappropriate words that is not allowed by OpenAI, Please try other prompts.",
+            {
+              duration: 10000,
+            }
+          );
+          return;
+        }
 
-        console.log(data);
+        const data = await response.json();
 
         setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
       } catch (error) {
-        alert(error);
+        toast.error("Something went wrong");
       } finally {
         setGeneratingImg(false);
       }
     } else {
-      alert("Please enter a prompt");
+      toast.error("Enter a prompt first");
     }
   };
 
@@ -115,7 +124,7 @@ const CreatePost = () => {
             isSurpriseMe
             handleSurpriseMe={handleSurpriseMe}
           />
-          <div className="relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-80 p-3 h-90 flex justify-center items-center">
+          <div className="relative self-center sm:self-start bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-80 p-3 h-90 flex justify-center items-center">
             {form.photo ? (
               <img
                 src={form.photo}
@@ -139,7 +148,7 @@ const CreatePost = () => {
 
           <div className="mt-5 flex gap-5">
             <button
-              disabled={generatingImg}
+              disabled={generatingImg || loading}
               type="button"
               onClick={generateImage}
               className=" text-white bg-emerald-400 hover:bg-emerald-500 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center disabled:bg-gray-300"
@@ -153,7 +162,7 @@ const CreatePost = () => {
               others in the community
             </p>
             <button
-              disabled={loading}
+              disabled={generatingImg || loading}
               type="submit"
               className="mt-3 text-white  bg-emerald-400 hover:bg-emerald-500 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center disabled:bg-gray-300"
             >

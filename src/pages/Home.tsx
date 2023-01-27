@@ -1,5 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { Cards, FormField } from "../components";
+import toast from "react-hot-toast";
 
 const Home = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -9,28 +10,32 @@ const Home = () => {
   const [searchResults, setSearchResults] = useState<any>([]);
   const [searchTimeout, setSearchTimeout] = useState<any>(null);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      setLoading(true);
+  const fetchPosts = async () => {
+    setLoading(true);
 
-      try {
-        const response = await fetch("https://picassoai-server.onrender.com/api/v1/posts", {
+    try {
+      const response = await fetch(
+        import.meta.env.VITE_API_URL+"/api/v1/posts",
+        {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          setAllPosts(result.data.reverse());
         }
-      } catch (error) {
-        alert(error);
-      } finally {
-        setLoading(false);
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        setAllPosts(result.data.reverse());
       }
-    };
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchPosts();
   }, []);
 
@@ -51,7 +56,7 @@ const Home = () => {
   };
 
   return (
-    <section className="max-w-7xl mx-auto">
+    <section className="max-w-7xl mx-auto ">
       <div>
         <h1 className="font-extrabold text-gray-700 text-3xl">
           The Community Showcase
@@ -84,11 +89,11 @@ const Home = () => {
                 <span className="text-gray-800">{searchText}</span>:
               </h2>
             )}
-            <div className="grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3">
+            <div className="grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3 ">
               {searchText ? (
                 <Cards data={searchResults} title="No results" />
               ) : (
-                <Cards data={allPosts} title="No post" />
+                <Cards data={allPosts} title="No post yet" />
               )}
             </div>
           </>
