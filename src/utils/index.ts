@@ -13,5 +13,5 @@ export const getRandomPrompt = (prompt: string): string => {
 }
 
 export const downloadImage = async (_id: string, photo: string) => {
-  FileSaver.saveAs(photo, `${_id}.jpg`);
+  FileSaver.saveAs("https:" + photo.split(":")[1], `${_id}.jpg`);
 }
