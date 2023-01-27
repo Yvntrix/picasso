@@ -5,7 +5,6 @@ import { Logo } from "./components";
 import { CreatePost, Home } from "./pages";
 
 const App = () => {
-  console.log(import.meta.env.VITE_API_URL);
   return (
     <BrowserRouter>
       <Toaster />
