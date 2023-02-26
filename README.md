@@ -1,6 +1,6 @@
 # Picasso
 
-Generate image using text utilizing OpenAi, built with ReactJs and TailwindCss
+Picasso AI is a powerful DALL-E clone that uses OpenAPI to generate images from text. Built with ReactJS, Vite, TypeScript, and Tailwind CSS, it's the ultimate tool for creating stunning visuals with ease.
 
 ## Deploy Status
 
