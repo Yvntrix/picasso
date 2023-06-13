@@ -101,8 +101,8 @@ const CreatePost = () => {
             <h3 className="text-lg font-semibold text-yellow-800">Attention needed</h3>
             <div className="mt-2  text-yellow-700">
               <p>
-                Unfortunately OpenAi Free token has been expired, so you can't generate images for
-                now. We are working on a solution. Sorry for the inconvenience.
+                Unfortunately OpenAi Free token has expired, so you can't generate images for now.
+                We are working on a solution. Sorry for the inconvenience.
               </p>
             </div>
           </div>
